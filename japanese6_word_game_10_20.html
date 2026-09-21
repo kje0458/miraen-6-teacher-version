@@ -1,98 +1,310 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>일본어 6단원 단어 게임</title>
+<title>일본어 6단원 단어 게임 - 교사용 34명</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f4f6fb;color:#202633;font-family:Arial,"Noto Sans KR",sans-serif}
-.wrap{max-width:820px;margin:auto;padding:18px}.card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 5px 20px #0001}
-.hidden{display:none!important}.primary,.next,.choice{border:0;border-radius:12px;padding:13px 18px;cursor:pointer;font-size:17px}
-.primary{background:#3b63f3;color:#fff}.next{width:100%;margin-top:16px;background:#18a566;color:#fff;font-weight:bold}
-input{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;font-size:17px}
-.lengths{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.choice{background:#eef1f8;text-align:center;padding:22px}.choice strong{display:block;font-size:28px;margin-bottom:6px}.choice.selected{background:#3b63f3;color:#fff}
-.top{display:flex;justify-content:space-between}.progress{height:10px;background:#e8ebf2;border-radius:10px;margin:15px 0;overflow:hidden}.bar{height:100%;background:#3b63f3;width:0}
-.type{text-align:center;font-weight:bold;color:#5263a7}.q{font-size:30px;font-weight:bold;text-align:center;padding:30px 10px}
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.opts button{background:#f0f3f8;border:0;border-radius:12px;padding:14px;font-size:17px;text-align:left}
-.correct{background:#dff6e8!important}.wrong{background:#ffe0e0!important}.feedback{margin-top:15px;padding:14px;border-radius:12px;text-align:center;font-weight:bold;background:#f5f6fa}
-.score{font-size:38px;font-weight:bold}.tag{display:inline-block;background:#eef1ff;padding:6px 9px;border-radius:99px;margin:3px}
-@media(max-width:600px){.opts,.lengths{grid-template-columns:1fr}.q{font-size:25px}}
-</style></head><body><div class="wrap">
+.wrap{max-width:1100px;margin:auto;padding:18px}.card{background:white;border-radius:18px;padding:22px;margin-bottom:16px;box-shadow:0 5px 20px #0001}
+.hidden{display:none!important}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+button{border:0;border-radius:12px;padding:11px 15px;font-size:16px;cursor:pointer}.primary{background:#3b63f3;color:#fff}.secondary{background:#e9edff}.danger{background:#ffe4e4;color:#a11}.small{font-size:13px;padding:8px 10px}
+.studentGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}.studentGrid button{background:#eef1f8}.studentGrid button.selected{background:#3b63f3;color:#fff}
+#nameInputs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}#nameInputs input{padding:9px;border:1px solid #ddd;border-radius:8px}
+.progress{height:10px;background:#e7eaf2;border-radius:99px;overflow:hidden;margin:12px 0}.bar{height:100%;background:#3b63f3;width:0}
+.qbox{font-size:28px;font-weight:700;text-align:center;padding:25px 10px}.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.opts button{background:#f1f4fa;text-align:left}
+.correct{background:#dff7e8!important}.wrong{background:#ffe1e1!important}.score{font-size:34px;font-weight:800}
+.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:700px}th,td{padding:10px;border-bottom:1px solid #e5e7ee;text-align:center}th{background:#f5f6fa}
+.tag{display:inline-block;background:#eef1ff;padding:5px 9px;border-radius:999px;margin:3px;font-size:13px}
+.notice{background:#fff7dc;border-left:5px solid #f0b429;padding:12px;border-radius:8px}
+@media(max-width:700px){.studentGrid{grid-template-columns:repeat(4,1fr)}#nameInputs{grid-template-columns:repeat(2,1fr)}.opts{grid-template-columns:1fr}.qbox{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="wrap">
 
-<div id="start" class="card">
-<h1>🎌 일본어 6단원 단어 게임</h1>
-<p>이름을 입력하고 문제 수를 선택하세요.</p>
-<input id="studentName" placeholder="이름 입력">
-<div class="lengths">
-<button id="len10" class="choice" onclick="chooseLength(10)"><strong>10문제</strong>빠르게 도전!</button>
-<button id="len20" class="choice" onclick="chooseLength(20)"><strong>20문제</strong>꼼꼼하게 도전!</button>
-</div>
-<p id="selectedInfo">문제 수를 선택해주세요.</p>
-<button class="primary" style="width:100%" onclick="beginGame()">게임 시작</button>
-</div>
-
-<div id="game" class="card hidden">
-<div class="top"><b id="nameLabel"></b><span id="num"></span></div>
-<div class="progress"><div id="bar" class="bar"></div></div>
-<div id="type" class="type"></div><div id="question" class="q"></div>
-<div id="options" class="opts"></div><div id="feedback" class="feedback hidden"></div>
-<button id="next" class="next hidden" onclick="nextQuestion()">다음 문제 →</button>
+<div id="teacherSetup" class="card">
+  <h1>🎌 일본어 6단원 단어 게임</h1>
+  <p><b>34명 교사용 버전</b> · 학생 선택 → 20문항 게임 → 자동 저장 → 전체 랭킹/취약단어 분석</p>
+  <div class="notice">기본 이름은 1번~34번 학생입니다. 실제 이름을 입력하고 저장하면 이 브라우저에 계속 보관됩니다.</div>
+  <h3>① 34명 학생 이름 등록</h3>
+  <div id="nameInputs"></div>
+  <p>
+    <button class="primary" onclick="saveNames()">이름 저장</button>
+    <button class="secondary" onclick="resetNames()">기본 이름으로 초기화</button>
+    <button class="danger" onclick="clearAllData()">게임 기록 전체 삭제</button>
+  </p>
 </div>
 
-<div id="finish" class="card hidden">
-<h1>🎉 게임 완료!</h1><div id="finalName"></div><div id="finalScore" class="score"></div>
-<div id="review"></div>
-<button class="primary" style="width:100%;margin-top:15px" onclick="location.reload()">다시 하기</button>
+<div id="selectScreen" class="card">
+  <div class="top"><h2>② 학생 선택</h2><span id="recordCount"></span></div>
+  <p>게임할 학생을 클릭하세요.</p>
+  <div id="studentGrid" class="studentGrid"></div>
+  <p>
+    <button id="startBtn" class="primary" disabled onclick="startGame()">③ 게임 시작</button>
+    <button class="secondary" onclick="showDashboard()">📊 교사용 분석</button>
+  </p>
 </div>
 
-</div><script>
-const DATA={"vocab": [{"jp": "会う", "kana": "あう", "meaning": "만나다"}, {"jp": "あそぶ", "kana": "あそぶ", "meaning": "놀다"}, {"jp": "作る", "kana": "つくる", "meaning": "만들다"}, {"jp": "来る", "kana": "くる", "meaning": "오다"}, {"jp": "する", "kana": "する", "meaning": "하다"}, {"jp": "読む", "kana": "よむ", "meaning": "읽다"}, {"jp": "行く", "kana": "いく", "meaning": "가다"}, {"jp": "話す", "kana": "はなす", "meaning": "이야기하다"}, {"jp": "食べる", "kana": "たべる", "meaning": "먹다"}, {"jp": "見る", "kana": "みる", "meaning": "보다"}, {"jp": "およぐ", "kana": "およぐ", "meaning": "수영하다"}, {"jp": "待つ", "kana": "まつ", "meaning": "기다리다"}, {"jp": "死ぬ", "kana": "しぬ", "meaning": "죽다"}, {"jp": "帰る", "kana": "かえる", "meaning": "돌아가다/돌아오다"}, {"jp": "歌う", "kana": "うたう", "meaning": "노래하다"}, {"jp": "書く", "kana": "かく", "meaning": "쓰다"}, {"jp": "休む", "kana": "やすむ", "meaning": "쉬다"}, {"jp": "のる", "kana": "のる", "meaning": "타다"}, {"jp": "ねる", "kana": "ねる", "meaning": "자다"}, {"jp": "使う", "kana": "つかう", "meaning": "사용하다"}, {"jp": "借りる", "kana": "かりる", "meaning": "빌리다"}, {"jp": "できる", "kana": "できる", "meaning": "할 수 있다"}, {"jp": "とる", "kana": "とる", "meaning": "(사진 등을) 찍다"}, {"jp": "なる", "kana": "なる", "meaning": "되다"}]};
-let qs=[],idx=0,score=0,wrong=[],locked=false,student="",questionCount=0;
+<div id="gameScreen" class="card hidden">
+  <div class="top"><b id="gameStudent"></b><span id="qNum"></span></div>
+  <div class="progress"><div id="progressBar" class="bar"></div></div>
+  <div id="questionType" style="text-align:center;font-weight:bold"></div>
+  <div id="question" class="qbox"></div>
+  <div id="options" class="opts"></div>
+</div>
 
-function shuffle(a){return [...a].sort(()=>Math.random()-.5);}
-function chooseLength(n){
- questionCount=n;
- document.getElementById("len10").classList.toggle("selected",n===10);
- document.getElementById("len20").classList.toggle("selected",n===20);
- document.getElementById("selectedInfo").textContent=n+"문제를 선택했습니다.";
+<div id="resultScreen" class="card hidden">
+  <h2>🎉 게임 완료!</h2>
+  <div id="resultStudent"></div>
+  <div id="resultScore" class="score"></div>
+  <div id="resultFeedback"></div>
+  <p>
+    <button class="primary" onclick="backToSelect()">다음 학생</button>
+    <button class="secondary" onclick="showDashboard()">📊 전체 랭킹</button>
+  </p>
+</div>
+
+<div id="dashboard" class="card hidden">
+  <div class="top">
+    <h2>📊 교사용 결과 분석</h2>
+    <div>
+      <button class="secondary small" onclick="downloadCSV()">CSV 저장</button>
+      <button class="danger small" onclick="clearAllData()">기록 초기화</button>
+    </div>
+  </div>
+  <div id="dashboardContent"></div>
+  <p><button class="secondary" onclick="backToSelect()">학생 선택으로</button></p>
+</div>
+
+</div>
+
+<script>
+const DATA = {
+  "students": ["1번 학생", "2번 학생", "3번 학생", "4번 학생", "5번 학생", "6번 학생", "7번 학생", "8번 학생", "9번 학생", "10번 학생", "11번 학생", "12번 학생", "13번 학생", "14번 학생", "15번 학생", "16번 학생", "17번 학생", "18번 학생", "19번 학생", "20번 학생", "21번 학생", "22번 학생", "23번 학생", "24번 학생", "25번 학생", "26번 학생", "27번 학생", "28번 학생", "29번 학생", "30번 학생", "31번 학생", "32번 학생", "33번 학생", "34번 학생"],
+  "vocab": [
+    {"jp": "会う", "kana": "あう", "meaning": "만나다"},
+    {"jp": "遊ぶ", "kana": "あそぶ", "meaning": "놀다"},
+    {"jp": "作る", "kana": "つくる", "meaning": "만들다"},
+    {"jp": "来る", "kana": "くる", "meaning": "오다"},
+    {"jp": "する", "kana": "する", "meaning": "하다"},
+    {"jp": "読む", "kana": "よむ", "meaning": "읽다"},
+    {"jp": "行く", "kana": "いく", "meaning": "가다"},
+    {"jp": "話す", "kana": "はなす", "meaning": "이야기하다"},
+    {"jp": "食べる", "kana": "たべる", "meaning": "먹다"},
+    {"jp": "見る", "kana": "みる", "meaning": "보다"},
+    {"jp": "泳ぐ", "kana": "およぐ", "meaning": "수영하다"},
+    {"jp": "待つ", "kana": "まつ", "meaning": "기다리다"},
+    {"jp": "死ぬ", "kana": "しぬ", "meaning": "죽다"},
+    {"jp": "帰る", "kana": "かえる", "meaning": "돌아가다/돌아오다"},
+    {"jp": "歌う", "kana": "うたう", "meaning": "노래하다"},
+    {"jp": "書く", "kana": "かく", "meaning": "쓰다"},
+    {"jp": "休む", "kana": "やすむ", "meaning": "쉬다"},
+    {"jp": "乗る", "kana": "のる", "meaning": "타다"},
+    {"jp": "寝る", "kana": "ねる", "meaning": "자다"},
+    {"jp": "使う", "kana": "つかう", "meaning": "사용하다"},
+    {"jp": "借りる", "kana": "かりる", "meaning": "빌리다"},
+    {"jp": "できる", "kana": "できる", "meaning": "할 수 있다"},
+    {"jp": "撮る", "kana": "とる", "meaning": "(사진 등을) 찍다"},
+    {"jp": "なる", "kana": "なる", "meaning": "되다"}
+  ]
+};
+
+let names = JSON.parse(localStorage.getItem("j6_names")||"null") || DATA.students;
+let results = JSON.parse(localStorage.getItem("j6_results")||"{}");
+let selected = null, questions = [], qi = 0, score = 0, wrong = [];
+
+const $ = id => document.getElementById(id);
+function esc(s){ return String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+function shuffle(a){ return a.sort(()=>Math.random()-.5); }
+
+function init(){
+  $("nameInputs").innerHTML = names.map((n,i)=>`<input id="nm${i}" value="${esc(n)}" placeholder="${i+1}번 학생">`).join("");
+  renderStudents();
+  updateCount();
 }
-function beginGame(){
- student=document.getElementById("studentName").value.trim();
- if(!student){alert("이름을 입력해주세요.");return;}
- if(!questionCount){alert("10문제 또는 20문제를 먼저 선택해주세요.");return;}
- const meaningCount=questionCount/2;
- const m=shuffle(DATA.vocab).slice(0,meaningCount).map(v=>({type:"meaning",v}));
- const r=shuffle(DATA.vocab).slice(0,meaningCount).map(v=>({type:"reading",v}));
- qs=shuffle(m.concat(r));idx=0;score=0;wrong=[];
- document.getElementById("start").classList.add("hidden");
- document.getElementById("game").classList.remove("hidden");
- document.getElementById("nameLabel").textContent=student;showQuestion();
+
+function saveNames(){
+  names = names.map((_,i)=>$("nm"+i).value.trim()||`${i+1}번 학생`);
+  localStorage.setItem("j6_names", JSON.stringify(names));
+  renderStudents();
+  alert("34명 이름을 저장했습니다.");
 }
+
+function resetNames(){
+  names = DATA.students.slice();
+  localStorage.setItem("j6_names", JSON.stringify(names));
+  init();
+}
+
+function clearAllData(){
+  if(confirm("모든 게임 기록을 삭제할까요?")){
+    results = {};
+    localStorage.removeItem("j6_results");
+    updateCount();
+    renderDashboard();
+  }
+}
+
+function renderStudents(){
+  $("studentGrid").innerHTML = names.map((n,i)=>`<button id="st${i}" onclick="selectStudent(${i})">${i+1}. ${esc(n)}</button>`).join("");
+}
+
+function selectStudent(i){
+  selected = i;
+  document.querySelectorAll("#studentGrid button").forEach(b=>b.classList.remove("selected"));
+  $("st"+i).classList.add("selected");
+  $("startBtn").disabled = false;
+}
+
+function updateCount(){
+  $("recordCount").textContent = `기록 완료 ${Object.keys(results).length}/34명`;
+}
+
+// 문제 생성 logic 수정: 읽기 문제는 한자가 포함된 단어(v.jp !== v.kana)만 선별하여 출제
+function makeQuestions(){
+  let m = shuffle(DATA.vocab.slice()).slice(0,10).map(v=>({type:"meaning", v}));
+  let kanjiVocab = DATA.vocab.filter(v => v.jp !== v.kana);
+  let r = shuffle(kanjiVocab.slice()).slice(0,10).map(v=>({type:"reading", v}));
+  return shuffle(m.concat(r));
+}
+
+function startGame(){
+  if(selected===null) return;
+  questions = makeQuestions();
+  qi = 0; score = 0; wrong = [];
+  $("selectScreen").classList.add("hidden");
+  $("teacherSetup").classList.add("hidden");
+  $("dashboard").classList.add("hidden");
+  $("resultScreen").classList.add("hidden");
+  $("gameScreen").classList.remove("hidden");
+  $("gameStudent").textContent = `${selected+1}번 · ${names[selected]}`;
+  showQuestion();
+}
+
 function showQuestion(){
- locked=false;document.getElementById("feedback").classList.add("hidden");document.getElementById("next").classList.add("hidden");
- const q=qs[idx],v=q.v,correct=q.type==="meaning"?v.meaning:v.kana;
- document.getElementById("num").textContent=(idx+1)+" / "+qs.length;
- document.getElementById("bar").style.width=((idx/qs.length)*100)+"%";
- document.getElementById("type").textContent=q.type==="meaning"?"뜻 맞히기":"히라가나 읽기";
- document.getElementById("question").textContent=q.type==="meaning"?v.kana:(v.jp+" → 히라가나로 읽으면?");
- const candidates=shuffle(DATA.vocab.filter(x=>x.kana!==v.kana)).slice(0,3).map(x=>q.type==="meaning"?x.meaning:x.kana);
- const opts=shuffle([correct,...candidates]);
- document.getElementById("options").innerHTML=opts.map(o=>'<button data-answer="'+encodeURIComponent(o)+'" onclick="answer(this)">'+escapeHtml(o)+'</button>').join("");
+  let q = questions[qi], v = q.v;
+  let correct = q.type === "meaning" ? v.meaning : v.kana;
+  
+  $("qNum").textContent = `${qi+1} / 20`;
+  $("progressBar").style.width = `${qi/20*100}%`;
+  $("questionType").textContent = q.type === "meaning" ? "뜻 맞히기" : "히라가나(요미가나) 읽기";
+  
+  // 뜻 맞히기: Japanese 표기 보여주기
+  // 히라가나 읽기: 한자 단어(v.jp) 제시 후 히라가나 읽기 질문
+  $("question").textContent = q.type === "meaning" ? v.jp : `${v.jp} → 히라가나로 읽으면?`;
+  
+  let candidates = shuffle(DATA.vocab.filter(x=>x!==v).slice()).slice(0,3).map(x=>q.type==="meaning"?x.meaning:x.kana);
+  let opts = shuffle([correct, ...candidates]);
+  
+  $("options").innerHTML = opts.map(o=>`<button onclick='answer(this,${JSON.stringify(o)},${JSON.stringify(correct)})'>${esc(o)}</button>`).join("");
 }
-function answer(btn){
- if(locked)return;locked=true;
- const chosen=decodeURIComponent(btn.dataset.answer),q=qs[idx],v=q.v,correct=q.type==="meaning"?v.meaning:v.kana;
- document.querySelectorAll("#options button").forEach(b=>b.disabled=true);
- const ok=chosen===correct;btn.classList.add(ok?"correct":"wrong");
- if(ok){score+=100/questionCount;showFeedback("⭕ 정답!");}
- else{wrong.push(v);document.querySelectorAll("#options button").forEach(b=>{if(decodeURIComponent(b.dataset.answer)===correct)b.classList.add("correct")});showFeedback("❌ 오답! 정답: "+correct);}
- document.getElementById("next").textContent=idx===qs.length-1?"결과 보기 →":"다음 문제 →";
- document.getElementById("next").classList.remove("hidden");
+
+function answer(btn, chosen, correct){
+  document.querySelectorAll("#options button").forEach(b=>b.disabled=true);
+  let ok = chosen === correct;
+  btn.classList.add(ok ? "correct" : "wrong");
+  if(ok){
+    score += 5;
+  } else {
+    let v = questions[qi].v;
+    wrong.push({kana: v.kana, meaning: v.meaning, type: questions[qi].type, jp: v.jp});
+    document.querySelectorAll("#options button").forEach(b=>{
+      if(b.textContent === correct) b.classList.add("correct");
+    });
+  }
+  setTimeout(()=>{
+    qi++;
+    qi < 20 ? showQuestion() : finishGame();
+  }, 450);
 }
-function showFeedback(t){const f=document.getElementById("feedback");f.textContent=t;f.classList.remove("hidden");}
-function nextQuestion(){if(!locked)return;if(idx>=qs.length-1){finishGame();return;}idx++;showQuestion();window.scrollTo({top:0,behavior:"smooth"});}
+
 function finishGame(){
- document.getElementById("game").classList.add("hidden");document.getElementById("finish").classList.remove("hidden");
- document.getElementById("finalName").textContent=student;
- document.getElementById("finalScore").textContent=Math.round(score)+"점 / 100점 ("+questionCount+"문제)";
- document.getElementById("review").innerHTML=wrong.length?"<p>복습할 단어</p>"+wrong.map(v=>'<span class="tag">'+escapeHtml(v.kana)+" = "+escapeHtml(v.meaning)+"</span>").join(""):"<p>🌟 전 문항 정답입니다!</p>";
+  let k = String(selected);
+  let prev = results[k] || {best:0, plays:0, correct:0, total:0, wrongWords:{}};
+  let ww = {...(prev.wrongWords||{})};
+  wrong.forEach(x => ww[x.jp] = (ww[x.jp]||0) + 1);
+  let c = 20 - wrong.length;
+  
+  results[k] = {
+    best: Math.max(prev.best, score),
+    latest: score,
+    plays: prev.plays + 1,
+    correct: prev.correct + c,
+    total: prev.total + 20,
+    wrongWords: ww
+  };
+  localStorage.setItem("j6_results", JSON.stringify(results));
+  
+  $("gameScreen").classList.add("hidden");
+  $("resultScreen").classList.remove("hidden");
+  $("resultStudent").innerHTML = `<b>${esc(names[selected])}</b>`;
+  $("resultScore").textContent = `${score}점 / 100점`;
+  $("resultFeedback").innerHTML = wrong.length ? 
+    `<p>오답 ${wrong.length}개</p><p>${wrong.map(x=>`<span class="tag">${esc(x.jp)}(${esc(x.kana)}) =${esc(x.meaning)}</span>`).join("")}</p>` : 
+    "<p>🌟 전 문항 정답!</p>";
+  updateCount();
 }
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
-</script></body></html>
+
+function backToSelect(){
+  $("resultScreen").classList.add("hidden");
+  $("dashboard").classList.add("hidden");
+  $("gameScreen").classList.add("hidden");
+  $("teacherSetup").classList.remove("hidden");
+  $("selectScreen").classList.remove("hidden");
+  updateCount();
+}
+
+function showDashboard(){
+  $("teacherSetup").classList.add("hidden");
+  $("selectScreen").classList.add("hidden");
+  $("gameScreen").classList.add("hidden");
+  $("resultScreen").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  renderDashboard();
+}
+
+function renderDashboard(){
+  let rows = names.map((n,i)=>({i,n,r:results[String(i)]})).filter(x=>x.r).sort((a,b)=>b.r.best-a.r.best||((b.r.correct/b.r.total)-(a.r.correct/a.r.total)));
+  let h = "<h3>🏆 전체 랭킹</h3>" + (rows.length ? `<div class="tablewrap"><table><tr><th>순위</th><th>학생</th><th>최고점</th><th>최근</th><th>누적 정답률</th><th>응시</th></tr>${rows.map((x,j)=>`<tr><td>${j+1}</td><td>${x.i+1}.${esc(x.n)}</td><td>${x.r.best}</td><td>${x.r.latest}</td><td>${Math.round(x.r.correct/x.r.total*100)}\%</td><td>${x.r.plays}</td></tr>`).join("")}</table></div>` : "<p>아직 기록이 없습니다.</p>");
+  
+  let wrongAll = {};
+  names.forEach((n,i)=>{
+    let r = results[String(i)];
+    if(r) Object.entries(r.wrongWords||{}).forEach(([w,c])=>wrongAll[w]=(wrongAll[w]||0)+c);
+  });
+  
+  let attempts = Object.values(results).reduce((s,r)=>s+r.total,0);
+  let weak = Object.entries(wrongAll).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  
+  h += "<h3 style='margin-top:24px'>📌 전체 취약 단어 TOP 10</h3>";
+  h += weak.length ? `<table><tr><th>순위</th><th>단어</th><th>오답 수</th><th>오답률*</th></tr>${weak.map((x,j)=>`<tr><td>${j+1}</td><td><b>${esc(x[0])}</b></td><td>${x[1]}</td><td>${attempts?Math.round(x[1]/attempts*100):0}%</td></tr>`).join("")}</table><p style='font-size:12px'>* 전체 응시 문항 중 해당 단어에서 발생한 오답 비율</p>` : "<p>아직 오답 데이터가 없습니다.</p>";
+  
+  h += "<h3 style='margin-top:24px'>📈 학생별 취약 단어</h3>";
+  h += names.map((n,i)=>{
+    let r = results[String(i)];
+    if(!r) return "";
+    let ws = Object.entries(r.wrongWords||{}).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    return `<div style='padding:10px 0;border-bottom:1px solid #eee'><b>${i+1}. ${esc(n)}</b> · 최근 ${r.latest}점 · 누적 정답률 ${Math.round(r.correct/r.total*100)}%<br>${ws.length?ws.map(w=>`<span class='tag'>${esc(w[0])} (${w[1]}회)</span>`).join(""):"오답 없음"}</div>`;
+  }).join("");
+  
+  $("dashboardContent").innerHTML = h;
+}
+
+function downloadCSV(){
+  let rows = [["번호","학생","최고점","최근점수","누적정답률","응시횟수","취약단어"]];
+  names.forEach((n,i)=>{
+    let r = results[String(i)];
+    rows.push([i+1, n, r?r.best:"", r?r.latest:"", r&&r.total?Math.round(r.correct/r.total*100)+"%":"", r?r.plays:"", r?Object.keys(r.wrongWords||{}).join(" / "):""]);
+  });
+  let csv = "\uFEFF" + rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(",")).join("\n");
+  let a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
+  a.download = "일본어6단원_34명_게임결과.csv";
+  a.click();
+}
+
+init();
+</script>
+</body>
+</html>
